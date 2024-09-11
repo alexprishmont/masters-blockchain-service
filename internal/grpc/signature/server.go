@@ -67,7 +67,11 @@ func (s *serverAPI) SaveSignature(
 		return nil, err
 	}
 
-	log.Printf("Tx sent: %s", tx.Hash().Hex())
+	txHash := tx.Hash().Hex()
+	s.log.Info("Tx sent", slog.String("tx", txHash))
+
+	etherscanURL := fmt.Sprintf("https://sepolia.etherscan.io/tx/%s", txHash)
+	s.log.Info("Track your transaction at", slog.String("tracker_url", etherscanURL))
 
 	return &blockchainv1.SaveResponse{Success: true}, nil
 }
